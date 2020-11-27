@@ -4,28 +4,6 @@ import Board from './components/Board';
 
 import GameStatus from './components/GameStatus';
 
-const calculateWinner = (squares) => {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-
-    if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
-};
-
 const Game = () => {
   const [history, setHistory] = useState([{squares: Array(9).fill(null)}]);
   const [stepNumber, setStepNumber] = useState(0);
@@ -117,3 +95,25 @@ const styles = StyleSheet.create({
 });
 
 export default Game;
+
+const calculateWinner = (squares) => {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+
+    if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+};

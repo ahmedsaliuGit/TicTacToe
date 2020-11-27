@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Pressable, Text, StyleSheet} from 'react-native';
 
 const Square = (props) => {
+  const [place, setPlace] = useState(null);
   const pressHandler = () => {
     console.log('Pressed!');
+    setPlace('X');
   };
 
   return (
-    <Pressable style={styles.square} onPress={() => props.handlePress()}>
+    <Pressable style={styles.square} onPress={() => pressHandler()}>
       <View>
-        <Text>{props.value}</Text>
+        <Text>{place}</Text>
       </View>
     </Pressable>
   );
