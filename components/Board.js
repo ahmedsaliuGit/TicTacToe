@@ -2,43 +2,39 @@ import React, {useState} from 'react';
 import {View, Pressable, Text, StyleSheet} from 'react-native';
 
 const Square = (props) => {
-  const [place, setPlace] = useState(null);
-  const pressHandler = () => {
-    console.log('Pressed!');
-    setPlace('X');
-  };
+  const {value, handlePress} = props;
 
   return (
-    <Pressable style={styles.square} onPress={() => pressHandler()}>
+    <Pressable style={styles.square} onPress={handlePress}>
       <View>
-        <Text>{place}</Text>
+        <Text style={styles.squareText}>{value}</Text>
       </View>
     </Pressable>
   );
 };
 
 const Board = (props) => {
-  const {squares, onPress} = props;
+  const {squares, handlePress} = props;
   const renderSquare = (pos) => {
-    return <Square value={squares[pos]} handlePress={() => onPress(pos)} />;
+    return <Square value={squares[pos]} handlePress={() => handlePress(pos)} />;
   };
 
   return (
     <>
       <View style={styles.boardRow}>
-        {renderSquare(squares[0])}
-        {renderSquare(squares[1])}
-        {renderSquare(squares[2])}
+        {renderSquare(0)}
+        {renderSquare(1)}
+        {renderSquare(2)}
       </View>
       <View style={styles.boardRow}>
-        {renderSquare(squares[3])}
-        {renderSquare(squares[4])}
-        {renderSquare(squares[5])}
+        {renderSquare(3)}
+        {renderSquare(4)}
+        {renderSquare(5)}
       </View>
       <View style={styles.boardRow}>
-        {renderSquare(squares[6])}
-        {renderSquare(squares[7])}
-        {renderSquare(squares[8])}
+        {renderSquare(6)}
+        {renderSquare(7)}
+        {renderSquare(8)}
       </View>
     </>
   );
@@ -59,6 +55,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: '#ccc',
+  },
+  squareText: {
+    fontSize: 44,
+    fontWeight: 'bold',
+    lineHeight: 54,
   },
 });
 

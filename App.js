@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, StatusBar, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+  Pressable,
+  FlatList,
+} from 'react-native';
 import Board from './components/Board';
 
 import GameStatus from './components/GameStatus';
@@ -8,7 +15,6 @@ const Game = () => {
   const [history, setHistory] = useState([{squares: Array(9).fill(null)}]);
   const [stepNumber, setStepNumber] = useState(0);
   const [xIsNext, setXIsNext] = useState(true);
-  const [count, setCount] = useState(0);
 
   const current = history[stepNumber];
   const winner = calculateWinner(current.squares);
@@ -24,9 +30,9 @@ const Game = () => {
     }
 
     squares[i] = xIsNext ? 'X' : 'O';
-    console.log(squares[i], newHistory);
+    // console.log(squares[i], newHistory);
     setHistory(newHistory.concat([{squares: squares}]));
-    console.log('AFTERSETSTATE::', newHistory, squares);
+    // console.log('AFTERSETSTATE::', newHistory, squares);
     setStepNumber(newHistory.length);
     setXIsNext(!xIsNext);
   };
@@ -36,17 +42,7 @@ const Game = () => {
     setXIsNext(step % 2 === 0);
   };
 
-  const moves = history.map((step, move) => {
-    const desc = move ? `Go to move #${move}` : 'Go to game start';
-
-    return (
-      <li key={move}>
-        <button onClick={() => this.jumpTo(move)} style={{cursor: 'pointer'}}>
-          {desc}
-        </button>
-      </li>
-    );
-  });
+  const moves = history.map((step, move) => ({key: move}));
 
   if (winner) {
     status = `The winner is ${winner}`;
@@ -59,15 +55,25 @@ const Game = () => {
       <StatusBar backgroundColor="blue" barStyle="light-content" />
       <View style={styles.game}>
         <View style={styles.gameStatus}>
-          <GameStatus xIsNext={status} count={count} />
+          <GameStatus xIsNext={status} winner={winner} />
         </View>
         <View style={styles.gameBody}>
-          <Board squares={current.squares} onPress={(i) => handlePress(i)} />
+          <Board
+            squares={current.squares}
+            handlePress={(i) => handlePress(i)}
+          />
         </View>
         <View style={styles.gameHistory}>
-          <Pressable onPress={() => setCount(count + 1)}>
-            <Text>Hello, world!</Text>
-          </Pressable>
+          <FlatList
+            data={moves}
+            renderItem={({item}) => (
+              <Pressable onPress={() => jumpTo(item.key)} style={styles.move}>
+                <Text>
+                  {item.key ? `Go to move #${item.key}` : 'Go to game start'}
+                </Text>
+              </Pressable>
+            )}
+          />
         </View>
       </View>
     </>
@@ -91,6 +97,18 @@ const styles = StyleSheet.create({
   gameHistory: {
     flex: 2,
     flexDirection: 'column',
+  },
+  move: {
+    marginHorizontal: 3,
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 12,
+    padding: 6,
+    borderWidth: 1,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginVertical: 2,
+    backgroundColor: '#ccc',
   },
 });
 
